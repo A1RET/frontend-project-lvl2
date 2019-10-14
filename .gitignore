@@ -10,3 +10,5 @@ dist
 node_modules/
 npm-debug.*
 Thumbs.db
+before.json
+after.json
