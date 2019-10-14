@@ -2,6 +2,7 @@
   "name": "gendiff",
   "version": "1.0.0",
   "description": "hexlet-project_gendiff",
+  "main": "dist/index.js",
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
@@ -20,7 +21,7 @@
   "keywords": [
     "hexlet",
     "hexlet-project",
-    "ggendiff"
+    "gendiff"
   ],
   "author": "Airet",
   "license": "ISC",
