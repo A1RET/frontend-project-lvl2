@@ -1,4 +1,4 @@
-install: 
+install:
 	npm install
 
 start:
@@ -7,7 +7,10 @@ start:
 build:
 	npm run build
 
-publish: 
+buildW:
+	npm run buildW
+
+publish:
 	npm publish --dry-run
 
 lint:
