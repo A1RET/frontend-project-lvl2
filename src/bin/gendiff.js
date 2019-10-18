@@ -10,6 +10,6 @@ program
   .description('Compares two configuration files and shows a difference.')
   .option('-f, --format [type]', 'Output format')
   .arguments('<firstConfig> <secondConfig>')
-  .action((fileBefore, fileAfter) => genDiff(fileBefore, fileAfter));
+  .action((fileBefore, fileAfter) => console.log(genDiff(fileBefore, fileAfter)));
 
 program.parse(process.argv);

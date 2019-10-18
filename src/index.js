@@ -30,7 +30,7 @@ const genDiff = (fileBefore, fileAfter) => {
     return acc;
   }, '{\n');
 
-  return console.log(`${resultString}}`);
+  return `${resultString}}`;
 };
 
 export default genDiff;
