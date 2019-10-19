@@ -11,23 +11,24 @@ const genDiff = (fileBefore, fileAfter) => {
   const keys = ldsh.union(Object.keys(objBefore), Object.keys(objAfter));
 
   const resultString = keys.reduce((acc, key) => {
+    let string = '';
     if ((ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) && objBefore[key] === objAfter[key]) {
-      acc += `    ${key}: ${objBefore[key]}\n`;
+      string = `    ${key}: ${objBefore[key]}\n`;
     }
 
     if ((ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) && objBefore[key] !== objAfter[key]) {
-      acc += `  + ${key}: ${objAfter[key]}\n  - ${key}: ${objBefore[key]}\n`;
+      string = `  + ${key}: ${objAfter[key]}\n  - ${key}: ${objBefore[key]}\n`;
     }
 
     if (ldsh.has(objBefore, key) && !ldsh.has(objAfter, key)) {
-      acc += `  - ${key}: ${objBefore[key]}\n`;
+      string = `  - ${key}: ${objBefore[key]}\n`;
     }
 
     if (!ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) {
-      acc += `  + ${key}: ${objAfter[key]}\n`;
+      string = `  + ${key}: ${objAfter[key]}\n`;
     }
 
-    return acc;
+    return `${acc}${string}`;
   }, '{\n');
 
   return `${resultString}}`;
