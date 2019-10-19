@@ -12,19 +12,19 @@ const genDiff = (fileBefore, fileAfter) => {
 
   const resultString = keys.reduce((acc, key) => {
     if ((ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) && objBefore[key] === objAfter[key]) {
-      return `${acc}    ${key}: ${objBefore[key]}\n`;
+      acc += `    ${key}: ${objBefore[key]}\n`;
     }
 
     if ((ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) && objBefore[key] !== objAfter[key]) {
-      return `${acc}  + ${key}: ${objAfter[key]}\n  - ${key}: ${objBefore[key]}\n`;
+      acc += `  + ${key}: ${objAfter[key]}\n  - ${key}: ${objBefore[key]}\n`;
     }
 
     if (ldsh.has(objBefore, key) && !ldsh.has(objAfter, key)) {
-      return `${acc}  - ${key}: ${objBefore[key]}\n`;
+      acc += `  - ${key}: ${objBefore[key]}\n`;
     }
 
     if (!ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) {
-      return `${acc}  + ${key}: ${objAfter[key]}\n`;
+      acc += `  + ${key}: ${objAfter[key]}\n`;
     }
 
     return acc;
