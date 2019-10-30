@@ -47,6 +47,7 @@
   "dependencies": {
     "commander": "^3.0.2",
     "cross-env": "^6.0.3",
+    "js-yaml": "^3.13.1",
     "lodash": "^4.17.15"
   }
 }
