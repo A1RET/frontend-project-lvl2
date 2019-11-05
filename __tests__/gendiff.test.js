@@ -2,15 +2,10 @@ import path from 'path';
 import fs from 'fs';
 import gendiff from '../src';
 
-test('gendiff', () => {
-  const beforeJson = path.resolve(__dirname, '__fixtures__/before_plain.json');
-  const afterJson = path.resolve(__dirname, '__fixtures__/after_plain.json');
+test.each([['before_plain.json', 'after_plain.json', 'result_plain.txt'], ['before_plain.yml', 'after_plain.yml', 'result_plain.txt'], ['before_plain.ini', 'after_plain.ini', 'result_plain.txt']])('gendiff', (before, after, expected) => {
+  const beforeFile = path.resolve(__dirname, `__fixtures__/${before}`);
+  const afterFile = path.resolve(__dirname, `__fixtures__/${after}`);
+  const result = fs.readFileSync(path.resolve(__dirname, `__fixtures__/${expected}`), 'utf8');
 
-  const beforeYaml = path.resolve(__dirname, '__fixtures__/before_plain.yml');
-  const afterYaml = path.resolve(__dirname, '__fixtures__/after_plain.yml');
-
-  const result = fs.readFileSync(path.resolve(__dirname, '__fixtures__/result_plain.txt'), 'utf8');
-
-  expect(gendiff(beforeJson, afterJson)).toBe(result);
-  expect(gendiff(beforeYaml, afterYaml)).toBe(result);
+  expect(gendiff(beforeFile, afterFile)).toBe(result);
 });

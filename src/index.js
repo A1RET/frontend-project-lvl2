@@ -4,8 +4,8 @@ import path from 'path';
 import parse from './parsers';
 
 const genDiff = (fileBefore, fileAfter) => {
-  const fileBeforeContent = fs.readFileSync(fileBefore);
-  const fileAfterContent = fs.readFileSync(fileAfter);
+  const fileBeforeContent = fs.readFileSync(fileBefore, 'utf-8');
+  const fileAfterContent = fs.readFileSync(fileAfter, 'utf-8');
 
   const fileBeforeParser = parse(path.extname(fileBefore));
   const fileAfterParser = parse(path.extname(fileAfter));
