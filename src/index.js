@@ -1,17 +1,9 @@
 import ldsh from 'lodash';
-import fs from 'fs';
-import path from 'path';
-import parse from './parsers';
+import parser from './parsers';
 
 const genDiff = (fileBefore, fileAfter) => {
-  const fileBeforeContent = fs.readFileSync(fileBefore, 'utf-8');
-  const fileAfterContent = fs.readFileSync(fileAfter, 'utf-8');
-
-  const fileBeforeParser = parse(path.extname(fileBefore));
-  const fileAfterParser = parse(path.extname(fileAfter));
-
-  const objBefore = fileBeforeParser(fileBeforeContent);
-  const objAfter = fileAfterParser(fileAfterContent);
+  const objBefore = parser(fileBefore);
+  const objAfter = parser(fileAfter);
 
   const keys = ldsh.union(Object.keys(objBefore), Object.keys(objAfter));
 
