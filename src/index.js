@@ -1,34 +1,85 @@
 import ldsh from 'lodash';
 import parser from './parsers';
 
-const genDiff = (fileBefore, fileAfter) => {
-  const objBefore = parser(fileBefore);
-  const objAfter = parser(fileAfter);
-
+const makeAst = (objBefore, objAfter) => {
   const keys = ldsh.union(Object.keys(objBefore), Object.keys(objAfter));
 
-  const resultString = keys.reduce((acc, key) => {
-    let string = '';
-    if ((ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) && objBefore[key] === objAfter[key]) {
-      string = `    ${key}: ${objBefore[key]}\n`;
-    }
+  const ast = keys.reduce((acc, key) => {
+    if (ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) {
+      if (ldsh.isObject(objBefore[key]) === ldsh.isObject(objAfter[key])) {
+        return [...acc, {
+          key,
+          type: 'children',
+          value: makeAst(objBefore[key], objAfter[key]),
+        }];
+      }
 
-    if ((ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) && objBefore[key] !== objAfter[key]) {
-      string = `  + ${key}: ${objAfter[key]}\n  - ${key}: ${objBefore[key]}\n`;
+      if (objBefore[key] === objAfter[key]) {
+        return [...acc, {
+          key,
+          type: 'same',
+          value: objBefore[key],
+        }];
+      }
+
+      if (objBefore[key] !== objAfter[key]) {
+        return [...acc, {
+          key,
+          type: 'changed',
+          beforeValue: objBefore[key],
+          afterValue: objAfter[key],
+        }];
+      }
     }
 
     if (ldsh.has(objBefore, key) && !ldsh.has(objAfter, key)) {
-      string = `  - ${key}: ${objBefore[key]}\n`;
+      return [...acc, {
+        key,
+        type: 'removed',
+        value: objBefore[key],
+      }];
     }
 
-    if (!ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) {
-      string = `  + ${key}: ${objAfter[key]}\n`;
-    }
+    return [...acc, {
+      key,
+      type: 'added',
+      value: objAfter[key],
+    }];
+  }, []);
 
-    return `${acc}${string}`;
-  }, '{\n');
-
-  return `${resultString}}`;
+  return ast;
 };
 
-export default genDiff;
+/*
+const astToString = (ast) => {
+  const diff = ast.reduce((acc, item) => {
+    const {
+      key, type, value, beforeValue, afterValue,
+    } = item;
+    switch (type) {
+      case 'children':
+        return [...acc, `${key}: ${astToString(value)}\n`];
+      case 'same':
+        return [...acc, `    ${key}: ${value}\n`];
+      case 'changed':
+        return [...acc, `  + ${key}: ${afterValue}\n  - ${key}: ${beforeValue}\n`];
+      case 'removed':
+        return [...acc, `  - ${key}: ${value}\n`];
+      case 'added':
+        return [...acc, `  + ${key}: ${value}\n`];
+      default:
+        return 'Error';
+    }
+  }, []);
+
+  return ldsh.flattenDeep(diff).join('\n');
+};
+*/
+
+export default (fileBefore, fileAfter) => {
+  const obj1 = parser(fileBefore);
+  const obj2 = parser(fileAfter);
+  const ast = makeAst(obj1, obj2);
+
+  return true;
+};
