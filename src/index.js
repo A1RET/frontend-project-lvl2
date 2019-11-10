@@ -6,7 +6,7 @@ const makeAst = (objBefore, objAfter) => {
 
   const ast = keys.reduce((acc, key) => {
     if (ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) {
-      if (ldsh.isObject(objBefore[key]) === ldsh.isObject(objAfter[key])) {
+      if (ldsh.isObject(objBefore[key]) && ldsh.isObject(objAfter[key])) {
         return [...acc, {
           key,
           type: 'children',
@@ -50,7 +50,6 @@ const makeAst = (objBefore, objAfter) => {
   return ast;
 };
 
-/*
 const astToString = (ast) => {
   const diff = ast.reduce((acc, item) => {
     const {
@@ -58,15 +57,15 @@ const astToString = (ast) => {
     } = item;
     switch (type) {
       case 'children':
-        return [...acc, `${key}: ${astToString(value)}\n`];
+        return [...acc, `${key}: ${astToString(value)}`];
       case 'same':
-        return [...acc, `    ${key}: ${value}\n`];
+        return [...acc, `    ${key}: ${value}`];
       case 'changed':
-        return [...acc, `  + ${key}: ${afterValue}\n  - ${key}: ${beforeValue}\n`];
+        return [...acc, `  + ${key}: ${afterValue}\n  - ${key}: ${beforeValue}`];
       case 'removed':
-        return [...acc, `  - ${key}: ${value}\n`];
+        return [...acc, `  - ${key}: ${value}`];
       case 'added':
-        return [...acc, `  + ${key}: ${value}\n`];
+        return [...acc, `  + ${key}: ${value}`];
       default:
         return 'Error';
     }
@@ -74,12 +73,11 @@ const astToString = (ast) => {
 
   return ldsh.flattenDeep(diff).join('\n');
 };
-*/
 
 export default (fileBefore, fileAfter) => {
   const obj1 = parser(fileBefore);
   const obj2 = parser(fileAfter);
   const ast = makeAst(obj1, obj2);
 
-  return true;
+  return `{\n${astToString(ast)}\n}`;
 };
