@@ -50,6 +50,12 @@ const makeAst = (objBefore, objAfter) => {
   return ast;
 };
 
+const checkObject = (value) => {
+  const objectToString = ([key, objectValue]) => `{  ${key}: ${objectValue}\n}`;
+
+  return ldsh.isObject(value) ? Object.entries(value).map(objectToString) : value;
+};
+
 const astToString = (ast) => {
   const diff = ast.reduce((acc, item) => {
     const {
@@ -59,13 +65,13 @@ const astToString = (ast) => {
       case 'children':
         return [...acc, `${key}: ${astToString(value)}`];
       case 'same':
-        return [...acc, `    ${key}: ${value}`];
+        return [...acc, `    ${key}: ${checkObject(value)}`];
       case 'changed':
-        return [...acc, `  + ${key}: ${afterValue}\n  - ${key}: ${beforeValue}`];
+        return [...acc, `  - ${key}: ${checkObject(beforeValue)}\n  + ${key}: ${checkObject(afterValue)}`];
       case 'removed':
-        return [...acc, `  - ${key}: ${value}`];
+        return [...acc, `  -git  ${key}: ${checkObject(value)}`];
       case 'added':
-        return [...acc, `  + ${key}: ${value}`];
+        return [...acc, `  + ${key}: ${checkObject(value)}`];
       default:
         return 'Error';
     }
