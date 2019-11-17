@@ -50,28 +50,29 @@ const makeAst = (objBefore, objAfter) => {
   return ast;
 };
 
-const checkObject = (value) => {
-  const objectToString = ([key, objectValue]) => `{  ${key}: ${objectValue}\n}`;
+const checkObject = (value, indent) => {
+  const objectToString = ([key, objectValue]) => `{\n${indent}${'  '.repeat(3)}${key}: ${objectValue}\n${indent}  }`;
 
   return ldsh.isObject(value) ? Object.entries(value).map(objectToString) : value;
 };
 
-const astToString = (ast) => {
+const astToString = (ast, indentSize) => {
   const diff = ast.reduce((acc, item) => {
     const {
       key, type, value, beforeValue, afterValue,
     } = item;
+    const indent = '  '.repeat(indentSize);
     switch (type) {
       case 'children':
-        return [...acc, `${key}: ${astToString(value)}`];
+        return [...acc, `${indent}  ${key}: {\n${astToString(value, indentSize + 2)}\n${indent}  }`];
       case 'same':
-        return [...acc, `    ${key}: ${checkObject(value)}`];
+        return [...acc, `${indent}  ${key}: ${checkObject(value, indent)}`];
       case 'changed':
-        return [...acc, `  - ${key}: ${checkObject(beforeValue)}\n  + ${key}: ${checkObject(afterValue)}`];
+        return [...acc, `${indent}- ${key}: ${checkObject(beforeValue, indent)}\n${indent}+ ${key}: ${checkObject(afterValue, indent)}`];
       case 'removed':
-        return [...acc, `  -git  ${key}: ${checkObject(value)}`];
+        return [...acc, `${indent}- ${key}: ${checkObject(value, indent)}`];
       case 'added':
-        return [...acc, `  + ${key}: ${checkObject(value)}`];
+        return [...acc, `${indent}+ ${key}: ${checkObject(value, indent)}`];
       default:
         return 'Error';
     }
@@ -85,5 +86,5 @@ export default (fileBefore, fileAfter) => {
   const obj2 = parser(fileAfter);
   const ast = makeAst(obj1, obj2);
 
-  return `{\n${astToString(ast)}\n}`;
+  return `{\n${astToString(ast, 1)}\n}`;
 };
