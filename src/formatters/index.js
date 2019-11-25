@@ -1,7 +1,9 @@
 import recursive from './recursive';
+import plain from './plain';
 
 const formatters = {
-  diff: recursive,
+  recursive,
+  plain,
 };
 
 export default (ast, format) => formatters[format](ast);
