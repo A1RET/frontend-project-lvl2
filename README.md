@@ -4,3 +4,15 @@
 Учебный проект Hexlet по профессии [Фронтенд JavaScript](https://ru.hexlet.io/professions/frontend)
 
 Утилита для поиска отличий в конфигурационных файлах.
+
+### Вызов справки
+[![asciicast](https://asciinema.org/a/283447.svg)](https://asciinema.org/a/283447)
+
+### Вывод в рекурсивном формате
+[![asciicast](https://asciinema.org/a/283448.svg)](https://asciinema.org/a/283448)
+
+### Вывод в плоском формате
+[![asciicast](https://asciinema.org/a/2FXBfT8mBwvgknp6aVBYy9Eyf.svg)](https://asciinema.org/a/2FXBfT8mBwvgknp6aVBYy9Eyf)
+
+### Вывод в формате json
+[![asciicast](https://asciinema.org/a/GH7Yo9lQNU1FolPZCpkW4IBUM.svg)](https://asciinema.org/a/GH7Yo9lQNU1FolPZCpkW4IBUM)
