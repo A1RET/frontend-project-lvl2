@@ -14,10 +14,7 @@ const astToString = (ast, parent) => {
     const {
       key, type, value, beforeValue, afterValue,
     } = item;
-    let path = key;
-    if (parent.length > 0) {
-      path = `${parent}.${path}`;
-    }
+    const path = parent.length > 0 ? `${parent}.${key}` : key;
     switch (type) {
       case 'children':
         return [...acc, `${astToString(value, path)}`];
