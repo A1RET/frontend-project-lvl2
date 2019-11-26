@@ -1,6 +1,15 @@
 import ldsh from 'lodash';
+import fs from 'fs';
+import path from 'path';
 import parser from './parsers';
 import formatter from './formatters';
+
+const getData = (filePath) => {
+  const fileContent = fs.readFileSync(filePath, 'utf-8');
+  const fileExtention = path.extname(filePath);
+
+  return parser(fileContent, fileExtention);
+};
 
 const makeAst = (objBefore, objAfter) => {
   const keys = ldsh.union(Object.keys(objBefore), Object.keys(objAfter));
@@ -52,8 +61,8 @@ const makeAst = (objBefore, objAfter) => {
 };
 
 export default (fileBefore, fileAfter, format) => {
-  const obj1 = parser(fileBefore);
-  const obj2 = parser(fileAfter);
+  const obj1 = getData(fileBefore);
+  const obj2 = getData(fileAfter);
   const ast = makeAst(obj1, obj2);
 
   return formatter(ast, format);
