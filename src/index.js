@@ -14,25 +14,25 @@ const getData = (filePath) => {
 const makeAst = (objBefore, objAfter) => {
   const keys = _.union(Object.keys(objBefore), Object.keys(objAfter));
 
-  const ast = keys.reduce((acc, key) => {
+  const ast = keys.map((key) => {
     if (_.has(objBefore, key) && _.has(objAfter, key)) {
       if (_.isObject(objBefore[key]) && _.isObject(objAfter[key])) {
-        return [...acc, { key, type: 'children', value: makeAst(objBefore[key], objAfter[key]) }];
+        return { key, type: 'children', value: makeAst(objBefore[key], objAfter[key]) };
       }
       if (objBefore[key] === objAfter[key]) {
-        return [...acc, { key, type: 'same', value: objBefore[key] }];
+        return { key, type: 'same', value: objBefore[key] };
       }
       if (objBefore[key] !== objAfter[key]) {
-        return [...acc, {
+        return {
           key, type: 'changed', beforeValue: objBefore[key], afterValue: objAfter[key],
-        }];
+        };
       }
     }
     if (_.has(objBefore, key) && !_.has(objAfter, key)) {
-      return [...acc, { key, type: 'removed', value: objBefore[key] }];
+      return { key, type: 'removed', value: objBefore[key] };
     }
-    return [...acc, { key, type: 'added', value: objAfter[key] }];
-  }, []);
+    return { key, type: 'added', value: objAfter[key] };
+  });
 
   return ast;
 };
