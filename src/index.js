@@ -6,7 +6,7 @@ import renderDiff from './formatters';
 
 const getData = (filePath) => {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
-  const fileExtention = path.extname(filePath);
+  const fileExtention = path.extname(filePath).slice(1);
 
   return parse(fileContent, fileExtention);
 };
