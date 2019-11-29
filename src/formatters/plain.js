@@ -9,7 +9,7 @@ const checkObject = (value) => {
   return value;
 };
 
-const astToString = (ast, parent) => {
+const transformAstToString = (ast, parent) => {
   const diff = ast.map((item) => {
     const {
       key, type, value, beforeValue, afterValue, children,
@@ -17,7 +17,7 @@ const astToString = (ast, parent) => {
     const path = parent.length > 0 ? `${parent}.${key}` : key;
     switch (type) {
       case 'nested':
-        return `${astToString(children, path)}`;
+        return `${transformAstToString(children, path)}`;
       case 'same':
         return '';
       case 'changed':
@@ -34,4 +34,4 @@ const astToString = (ast, parent) => {
   return _.flattenDeep(diff).filter((el) => el !== '').join('\n');
 };
 
-export default (ast) => astToString(ast, '');
+export default (ast) => transformAstToString(ast, '');

@@ -6,7 +6,7 @@ const checkObject = (value, indent) => {
   return _.isObject(value) ? Object.entries(value).map(objectToString) : value;
 };
 
-const astToString = (ast, indentSize) => {
+const transformAstToString = (ast, indentSize) => {
   const diff = ast.map((item) => {
     const {
       key, type, value, beforeValue, afterValue, children,
@@ -14,7 +14,7 @@ const astToString = (ast, indentSize) => {
     const indent = '  '.repeat(indentSize);
     switch (type) {
       case 'nested':
-        return `${indent}  ${key}: {\n${astToString(children, indentSize + 2)}\n${indent}  }`;
+        return `${indent}  ${key}: {\n${transformAstToString(children, indentSize + 2)}\n${indent}  }`;
       case 'same':
         return `${indent}  ${key}: ${checkObject(value, indent)}`;
       case 'changed':
@@ -31,4 +31,4 @@ const astToString = (ast, indentSize) => {
   return _.flattenDeep(diff).join('\n');
 };
 
-export default (ast) => `{\n${astToString(ast, 1)}\n}`;
+export default (ast) => `{\n${transformAstToString(ast, 1)}\n}`;

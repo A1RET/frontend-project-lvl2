@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
-import parser from './parsers';
-import formatter from './formatters';
+import parse from './parsers';
+import renderDiff from './formatters';
 
 const getData = (filePath) => {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const fileExtention = path.extname(filePath);
 
-  return parser(fileContent, fileExtention);
+  return parse(fileContent, fileExtention);
 };
 
 const makeAst = (objBefore, objAfter) => {
@@ -42,5 +42,5 @@ export default (fileBeforePath, fileAfterPath, format) => {
   const obj2 = getData(fileAfterPath);
   const ast = makeAst(obj1, obj2);
 
-  return formatter(ast, format);
+  return renderDiff(ast, format);
 };
