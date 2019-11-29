@@ -22,11 +22,9 @@ const makeAst = (objBefore, objAfter) => {
       if (objBefore[key] === objAfter[key]) {
         return { key, type: 'same', value: objBefore[key] };
       }
-      if (objBefore[key] !== objAfter[key]) {
-        return {
-          key, type: 'changed', beforeValue: objBefore[key], afterValue: objAfter[key],
-        };
-      }
+      return {
+        key, type: 'changed', beforeValue: objBefore[key], afterValue: objAfter[key],
+      };
     }
     if (_.has(objBefore, key) && !_.has(objAfter, key)) {
       return { key, type: 'removed', value: objBefore[key] };
