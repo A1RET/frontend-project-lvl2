@@ -13,9 +13,9 @@ test.each([
   ['before.yml', 'after.yml', 'json'],
   ['before.ini', 'after.ini', 'json'],
 ])('gendiff', (before, after, format) => {
-  const beforeFile = path.resolve(__dirname, `__fixtures__/${before}`);
-  const afterFile = path.resolve(__dirname, `__fixtures__/${after}`);
+  const fileBeforePath = path.resolve(__dirname, `__fixtures__/${before}`);
+  const fileAfterPath = path.resolve(__dirname, `__fixtures__/${after}`);
   const result = fs.readFileSync(path.resolve(__dirname, `__fixtures__/result_${format}.txt`), 'utf8');
 
-  expect(gendiff(beforeFile, afterFile, format)).toBe(result);
+  expect(gendiff(fileBeforePath, fileAfterPath, format)).toBe(result);
 });

@@ -37,9 +37,9 @@ const makeAst = (objBefore, objAfter) => {
   return ast;
 };
 
-export default (fileBefore, fileAfter, format) => {
-  const obj1 = getData(fileBefore);
-  const obj2 = getData(fileAfter);
+export default (fileBeforePath, fileAfterPath, format) => {
+  const obj1 = getData(fileBeforePath);
+  const obj2 = getData(fileAfterPath);
   const ast = makeAst(obj1, obj2);
 
   return formatter(ast, format);
