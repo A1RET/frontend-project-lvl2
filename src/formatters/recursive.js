@@ -9,12 +9,12 @@ const checkObject = (value, indent) => {
 const astToString = (ast, indentSize) => {
   const diff = ast.reduce((acc, item) => {
     const {
-      key, type, value, beforeValue, afterValue,
+      key, type, value, beforeValue, afterValue, children,
     } = item;
     const indent = '  '.repeat(indentSize);
     switch (type) {
-      case 'children':
-        return [...acc, `${indent}  ${key}: {\n${astToString(value, indentSize + 2)}\n${indent}  }`];
+      case 'nested':
+        return [...acc, `${indent}  ${key}: {\n${astToString(children, indentSize + 2)}\n${indent}  }`];
       case 'same':
         return [...acc, `${indent}  ${key}: ${checkObject(value, indent)}`];
       case 'changed':

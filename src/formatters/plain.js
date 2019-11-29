@@ -12,12 +12,12 @@ const checkObject = (value) => {
 const astToString = (ast, parent) => {
   const diff = ast.reduce((acc, item) => {
     const {
-      key, type, value, beforeValue, afterValue,
+      key, type, value, beforeValue, afterValue, children,
     } = item;
     const path = parent.length > 0 ? `${parent}.${key}` : key;
     switch (type) {
-      case 'children':
-        return [...acc, `${astToString(value, path)}`];
+      case 'nested':
+        return [...acc, `${astToString(children, path)}`];
       case 'same':
         return [...acc];
       case 'changed':

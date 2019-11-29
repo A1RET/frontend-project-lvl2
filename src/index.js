@@ -17,7 +17,7 @@ const makeAst = (objBefore, objAfter) => {
   const ast = keys.map((key) => {
     if (_.has(objBefore, key) && _.has(objAfter, key)) {
       if (_.isObject(objBefore[key]) && _.isObject(objAfter[key])) {
-        return { key, type: 'children', value: makeAst(objBefore[key], objAfter[key]) };
+        return { key, type: 'nested', children: makeAst(objBefore[key], objAfter[key]) };
       }
       if (objBefore[key] === objAfter[key]) {
         return { key, type: 'same', value: objBefore[key] };
