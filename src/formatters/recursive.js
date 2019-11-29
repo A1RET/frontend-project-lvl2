@@ -1,9 +1,9 @@
-import ldsh from 'lodash';
+import _ from 'lodash';
 
 const checkObject = (value, indent) => {
   const objectToString = ([key, objectValue]) => `{\n${indent}${'  '.repeat(3)}${key}: ${objectValue}\n${indent}  }`;
 
-  return ldsh.isObject(value) ? Object.entries(value).map(objectToString) : value;
+  return _.isObject(value) ? Object.entries(value).map(objectToString) : value;
 };
 
 const astToString = (ast, indentSize) => {
@@ -28,7 +28,7 @@ const astToString = (ast, indentSize) => {
     }
   }, []);
 
-  return ldsh.flattenDeep(diff).join('\n');
+  return _.flattenDeep(diff).join('\n');
 };
 
 export default (ast) => `{\n${astToString(ast, 1)}\n}`;

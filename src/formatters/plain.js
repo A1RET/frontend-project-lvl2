@@ -1,9 +1,9 @@
-import ldsh from 'lodash';
+import _ from 'lodash';
 
 const checkObject = (value) => {
-  if (ldsh.isObject(value)) {
+  if (_.isObject(value)) {
     return '[complex value]';
-  } if (ldsh.isString(value)) {
+  } if (_.isString(value)) {
     return `'${value}'`;
   }
   return value;
@@ -31,7 +31,7 @@ const astToString = (ast, parent) => {
     }
   }, []);
 
-  return ldsh.flattenDeep(diff).join('\n');
+  return _.flattenDeep(diff).join('\n');
 };
 
 export default (ast) => astToString(ast, '');

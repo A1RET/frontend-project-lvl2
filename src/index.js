@@ -1,4 +1,4 @@
-import ldsh from 'lodash';
+import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import parser from './parsers';
@@ -12,11 +12,11 @@ const getData = (filePath) => {
 };
 
 const makeAst = (objBefore, objAfter) => {
-  const keys = ldsh.union(Object.keys(objBefore), Object.keys(objAfter));
+  const keys = _.union(Object.keys(objBefore), Object.keys(objAfter));
 
   const ast = keys.reduce((acc, key) => {
-    if (ldsh.has(objBefore, key) && ldsh.has(objAfter, key)) {
-      if (ldsh.isObject(objBefore[key]) && ldsh.isObject(objAfter[key])) {
+    if (_.has(objBefore, key) && _.has(objAfter, key)) {
+      if (_.isObject(objBefore[key]) && _.isObject(objAfter[key])) {
         return [...acc, { key, type: 'children', value: makeAst(objBefore[key], objAfter[key]) }];
       }
       if (objBefore[key] === objAfter[key]) {
@@ -28,7 +28,7 @@ const makeAst = (objBefore, objAfter) => {
         }];
       }
     }
-    if (ldsh.has(objBefore, key) && !ldsh.has(objAfter, key)) {
+    if (_.has(objBefore, key) && !_.has(objAfter, key)) {
       return [...acc, { key, type: 'removed', value: objBefore[key] }];
     }
     return [...acc, { key, type: 'added', value: objAfter[key] }];
