@@ -10,28 +10,28 @@ const checkObject = (value) => {
 };
 
 const astToString = (ast, parent) => {
-  const diff = ast.reduce((acc, item) => {
+  const diff = ast.map((item) => {
     const {
       key, type, value, beforeValue, afterValue, children,
     } = item;
     const path = parent.length > 0 ? `${parent}.${key}` : key;
     switch (type) {
       case 'nested':
-        return [...acc, `${astToString(children, path)}`];
+        return `${astToString(children, path)}`;
       case 'same':
-        return [...acc];
+        return '';
       case 'changed':
-        return [...acc, `Property '${path}' was updated. From ${checkObject(beforeValue)} to ${checkObject(afterValue)}`];
+        return `Property '${path}' was updated. From ${checkObject(beforeValue)} to ${checkObject(afterValue)}`;
       case 'removed':
-        return [...acc, `Property '${path}' was removed`];
+        return `Property '${path}' was removed`;
       case 'added':
-        return [...acc, `Property '${path}' was added with value: ${checkObject(value)}`];
+        return `Property '${path}' was added with value: ${checkObject(value)}`;
       default:
         return 'Error';
     }
-  }, []);
+  });
 
-  return _.flattenDeep(diff).join('\n');
+  return _.flattenDeep(diff).filter((el) => el !== '').join('\n');
 };
 
 export default (ast) => astToString(ast, '');
