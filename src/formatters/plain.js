@@ -3,7 +3,9 @@ import _ from 'lodash';
 const checkObject = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
-  } if (_.isString(value)) {
+  }
+
+  if (_.isString(value)) {
     return `'${value}'`;
   }
   return value;

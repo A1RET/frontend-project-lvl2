@@ -1,9 +1,13 @@
 import _ from 'lodash';
 
 const checkObject = (value, indent) => {
+  if (!_.isObject(value)) {
+    return value;
+  }
+
   const objectToString = ([key, objectValue]) => `{\n${indent}${'  '.repeat(3)}${key}: ${objectValue}\n${indent}  }`;
 
-  return _.isObject(value) ? Object.entries(value).map(objectToString) : value;
+  return Object.entries(value).map(objectToString);
 };
 
 const transformAstToString = (ast, indentSize) => {
@@ -24,7 +28,7 @@ const transformAstToString = (ast, indentSize) => {
       case 'added':
         return `${indent}+ ${key}: ${checkObject(value, indent)}`;
       default:
-        return 'Error';
+        throw new Error('Wrong type of node');
     }
   });
 
