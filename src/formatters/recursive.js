@@ -10,26 +10,20 @@ const checkObject = (value, indent) => {
   return Object.entries(value).map(objectToString);
 };
 
+const types = {
+  nested: (indent, node, fn, indentSize) => `${indent}  ${node.key}: {\n${fn(node.children, indentSize + 2)}\n${indent}  }`,
+  same: (indent, node) => `${indent}  ${node.key}: ${checkObject(node.value, indent)}`,
+  changed: (indent, node) => `${indent}- ${node.key}: ${checkObject(node.beforeValue, indent)}\n${indent}+ ${node.key}: ${checkObject(node.afterValue, indent)}`,
+  removed: (indent, node) => `${indent}- ${node.key}: ${checkObject(node.value, indent)}`,
+  added: (indent, node) => `${indent}+ ${node.key}: ${checkObject(node.value, indent)}`,
+};
+
 const transformAstToString = (ast, indentSize) => {
   const diff = ast.map((item) => {
-    const {
-      key, type, value, beforeValue, afterValue, children,
-    } = item;
+    const { type } = item;
     const indent = '  '.repeat(indentSize);
-    switch (type) {
-      case 'nested':
-        return `${indent}  ${key}: {\n${transformAstToString(children, indentSize + 2)}\n${indent}  }`;
-      case 'same':
-        return `${indent}  ${key}: ${checkObject(value, indent)}`;
-      case 'changed':
-        return `${indent}- ${key}: ${checkObject(beforeValue, indent)}\n${indent}+ ${key}: ${checkObject(afterValue, indent)}`;
-      case 'removed':
-        return `${indent}- ${key}: ${checkObject(value, indent)}`;
-      case 'added':
-        return `${indent}+ ${key}: ${checkObject(value, indent)}`;
-      default:
-        throw new Error('Wrong type of node');
-    }
+
+    return types[type](indent, item, transformAstToString, indentSize);
   });
 
   return _.flattenDeep(diff).join('\n');
