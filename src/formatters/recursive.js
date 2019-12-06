@@ -1,21 +1,21 @@
 import _ from 'lodash';
 
-const checkObject = (value, indent) => {
+const stringify = (value, indent) => {
   if (!_.isObject(value)) {
     return value;
   }
 
-  const objectToString = ([key, objectValue]) => `{\n${indent}${'  '.repeat(3)}${key}: ${objectValue}\n${indent}  }`;
+  const transformObjectToString = ([key, objectValue]) => `{\n${indent}${'  '.repeat(3)}${key}: ${objectValue}\n${indent}  }`;
 
-  return Object.entries(value).map(objectToString);
+  return Object.entries(value).map(transformObjectToString);
 };
 
 const types = {
   nested: (indent, node, fn, indentSize) => `${indent}  ${node.key}: {\n${fn(node.children, indentSize + 2)}\n${indent}  }`,
-  same: (indent, node) => `${indent}  ${node.key}: ${checkObject(node.value, indent)}`,
-  changed: (indent, node) => `${indent}- ${node.key}: ${checkObject(node.beforeValue, indent)}\n${indent}+ ${node.key}: ${checkObject(node.afterValue, indent)}`,
-  removed: (indent, node) => `${indent}- ${node.key}: ${checkObject(node.value, indent)}`,
-  added: (indent, node) => `${indent}+ ${node.key}: ${checkObject(node.value, indent)}`,
+  same: (indent, node) => `${indent}  ${node.key}: ${stringify(node.value, indent)}`,
+  changed: (indent, node) => `${indent}- ${node.key}: ${stringify(node.beforeValue, indent)}\n${indent}+ ${node.key}: ${stringify(node.afterValue, indent)}`,
+  removed: (indent, node) => `${indent}- ${node.key}: ${stringify(node.value, indent)}`,
+  added: (indent, node) => `${indent}+ ${node.key}: ${stringify(node.value, indent)}`,
 };
 
 const transformAstToString = (ast, indentSize) => {

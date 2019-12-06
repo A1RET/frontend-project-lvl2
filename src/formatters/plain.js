@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const checkObject = (value) => {
+const stringify = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
@@ -14,9 +14,9 @@ const checkObject = (value) => {
 const types = {
   nested: (path, node, fn) => `${fn(node.children, path)}`,
   same: () => null,
-  changed: (path, node) => `Property '${path}' was updated. From ${checkObject(node.beforeValue)} to ${checkObject(node.afterValue)}`,
+  changed: (path, node) => `Property '${path}' was updated. From ${stringify(node.beforeValue)} to ${stringify(node.afterValue)}`,
   removed: (path) => `Property '${path}' was removed`,
-  added: (path, node) => `Property '${path}' was added with value: ${checkObject(node.value)}`,
+  added: (path, node) => `Property '${path}' was added with value: ${stringify(node.value)}`,
 };
 
 const transformAstToString = (ast, parent) => {
